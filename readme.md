@@ -20,16 +20,19 @@ A Flask-based machine learning web application for predicting car prices, contai
 
 ```
 .
-├── main.py                    # Flask application entry point
-├── model/
-│   └── car_price_model.pkl   # Trained Random Forest model
-├── templates/
-│   └── index.html            # Main webpage for user input
-├── Dockerfile                # Docker image configuration
-├── main.ipynb               # EDA, data processing and model training notebook
-├── requirements.txt         # Python dependencies
-└── README.md               # Project documentation
+├── app/
+│   ├── main.py              # Flask application entry point
+│   ├── model/
+│   │   └── car_price_model.pkl  # Trained Random Forest model
+│   ├── templates/
+│   │   └── index.html      # Main webpage for user input
+│   ├── Dockerfile          # Docker image configuration
+│   └── requirements.txt    # Python dependencies
+├── main.ipynb              # EDA, data processing and model training notebook
+└── README.md              # Project documentation
 ```
+
+````
 
 ## 🚀 Getting Started
 
@@ -43,7 +46,8 @@ A Flask-based machine learning web application for predicting car prices, contai
 ```bash
 git clone https://github.com/saugatshakya/ML_assignment1.git
 cd car-price-prediction-app
-```
+cd app
+````
 
 ### 2. Run Locally (without Docker)
 
