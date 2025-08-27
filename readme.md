@@ -2,6 +2,9 @@
 
 A Flask-based machine learning web application for predicting car prices, containerized with Docker. The project uses a trained Random Forest Regressor model built from a dataset of 8,128 cars with features like year, km_driven, mileage, engine, max_power, and brand.
 
+## Demo
+[Live Demo](https://carprice-predict.ambitiousisland-1be3b1ed.southeastasia.azurecontainerapps.io/)
+
 ![Python](https://img.shields.io/badge/python-v3.9+-blue.svg)
 ![Flask](https://img.shields.io/badge/flask-v2.0+-green.svg)
 ![Docker](https://img.shields.io/badge/docker-supported-blue.svg)
@@ -44,7 +47,7 @@ A Flask-based machine learning web application for predicting car prices, contai
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/saugatshakya/ML_assignment1.git
+git clone https://github.com/saugatshakya/predicting_car_price.git
 cd car-price-prediction-app
 cd app
 ````
@@ -110,7 +113,7 @@ Visit: **http://127.0.0.1:5001** to access the web app.
 
 ```json
 {
-  "predicted_price": 925000
+  "price": 925000
 }
 ```
 
@@ -203,7 +206,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 **Chaky's Company Team**
 
-- 📧 Email: [your-email@example.com]
+- 📧 Email: saugatoff@gmail.com
 - 🐙 GitHub: [@saugatshakya](https://github.com/saugatshakya)
 
 ## 🙏 Acknowledgments
