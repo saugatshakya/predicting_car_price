@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Car Price Predictor</title>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        position: relative;
+        overflow-x: hidden;
+      }
+
+      /* Animated background particles */
+      .bg-animation {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        z-index: 0;
+      }
+
+      .particle {
+        position: absolute;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+        animation: float 6s ease-in-out infinite;
+      }
+
+      .particle:nth-child(1) {
+        width: 80px;
+        height: 80px;
+        left: 10%;
+        animation-delay: 0s;
+      }
+
+      .particle:nth-child(2) {
+        width: 120px;
+        height: 120px;
+        left: 85%;
+        animation-delay: -2s;
+      }
+
+      .particle:nth-child(3) {
+        width: 60px;
+        height: 60px;
+        left: 70%;
+        animation-delay: -4s;
+      }
+
+      .particle:nth-child(4) {
+        width: 100px;
+        height: 100px;
+        left: 20%;
+        animation-delay: -3s;
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0px) rotate(0deg);
+        }
+        33% {
+          transform: translateY(-30px) rotate(120deg);
+        }
+        66% {
+          transform: translateY(30px) rotate(240deg);
+        }
+      }
+
+      .container {
+        position: relative;
+        z-index: 1;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        padding: 2rem 1rem;
+      }
+
+      .main-card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px);
+        border-radius: 2rem;
+        padding: 3rem;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1),
+          0 0 0 1px rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        max-width: 600px;
+        width: 100%;
+        margin: 0 auto;
+        transform: translateY(20px);
+        animation: slideUp 1s ease-out forwards;
+      }
+
+      @keyframes slideUp {
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+
+      .header {
+        text-align: center;
+        margin-bottom: 2.5rem;
+      }
+
+      .header h1 {
+        font-size: 2.5rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 0.5rem;
+        position: relative;
+      }
+
+      .header::after {
+        content: "";
+        width: 80px;
+        height: 4px;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        border-radius: 2px;
+        margin: 1rem auto;
+        display: block;
+      }
+
+      .form-group {
+        margin-bottom: 1.5rem;
+        position: relative;
+      }
+
+      .form-label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+        color: #374151;
+        font-size: 0.95rem;
+      }
+
+      .form-label .input-icon {
+        margin-right: 0.5rem;
+        color: #9ca3af;
+        font-size: 1.1rem;
+        vertical-align: middle;
+        transition: color 0.3s ease;
+      }
+
+      .input-wrapper {
+        position: relative;
+      }
+
+      .form-control {
+        width: 100%;
+        padding: 1rem 1rem 1rem 3rem;
+        border: 2px solid #e5e7eb;
+        border-radius: 1rem;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background: #f9fafb;
+        outline: none;
+      }
+
+      select.form-control {
+        padding: 1rem; /* Consistent padding for select */
+      }
+
+      .form-control:focus {
+        border-color: #667eea;
+        background: #fff;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        transform: translateY(-2px);
+      }
+
+      .input-icon {
+        position: absolute;
+        left: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #9ca3af;
+        font-size: 1.1rem;
+        transition: color 0.3s ease;
+      }
+
+      .form-control:focus + .input-icon {
+        color: #667eea;
+      }
+
+      .predict-btn {
+        width: 100%;
+        padding: 1.2rem;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        border: none;
+        border-radius: 1rem;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .predict-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+      }
+
+      .predict-btn:active {
+        transform: translateY(0);
+      }
+
+      .predict-btn::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.2),
+          transparent
+        );
+        transition: left 0.5s;
+      }
+
+      .predict-btn:hover::before {
+        left: 100%;
+      }
+
+      .result {
+        margin-top: 2rem;
+        padding: 1.5rem;
+        text-align: center;
+        border-radius: 1rem;
+        font-size: 1.3rem;
+        font-weight: 700;
+        opacity: 0;
+        transform: translateY(20px);
+        transition: all 0.5s ease;
+      }
+
+      .result.show {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .result.success {
+        background: linear-gradient(135deg, #10b981, #059669);
+        color: white;
+        box-shadow: 0 8px 25px rgba(16, 185, 129, 0.3);
+      }
+
+      .result.error {
+        background: linear-gradient(135deg, #ef4444, #dc2626);
+        color: white;
+        box-shadow: 0 8px 25px rgba(239, 68, 68, 0.3);
+      }
+
+      .result.loading {
+        background: linear-gradient(135deg, #f59e0b, #d97706);
+        color: white;
+      }
+
+      .loading-spinner {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 3px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        border-top-color: white;
+        animation: spin 1s linear infinite;
+        margin-right: 0.5rem;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      .price-display {
+        font-size: 2rem;
+        margin-top: 0.5rem;
+      }
+
+      .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+      }
+
+      @media (max-width: 768px) {
+        .main-card {
+          padding: 2rem 1.5rem;
+          margin: 1rem;
+          border-radius: 1.5rem;
+        }
+
+        .header h1 {
+          font-size: 2rem;
+        }
+
+        .form-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .feature-icons {
+        display: flex;
+        justify-content: space-around;
+        margin: 2rem 0;
+        opacity: 0.7;
+      }
+
+      .feature-icon {
+        text-align: center;
+        color: #667eea;
+      }
+
+      .feature-icon i {
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .feature-icon span {
+        display: block;
+        font-size: 0.8rem;
+        font-weight: 500;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="bg-animation">
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+    </div>
+
+    <div class="container">
+      <div class="main-card">
+        <div class="header">
+          <h1><i class="fas fa-car"></i> Car Price Predictor</h1>
+        </div>
+
+        <form id="carForm">
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="year" class="form-label"
+                ><i class="fas fa-calendar-alt input-icon"></i> Manufacturing
+                Year</label
+              >
+              <div class="input-wrapper">
+                <input
+                  type="number"
+                  class="form-control"
+                  id="year"
+                  name="year"
+                  placeholder="e.g. 2020"
+                  required
+                />
+                <i class="fas fa-calendar-alt input-icon"></i>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="km_driven" class="form-label"
+                ><i class="fas fa-road input-icon"></i> Kilometers Driven</label
+              >
+              <div class="input-wrapper">
+                <input
+                  type="number"
+                  class="form-control"
+                  id="km_driven"
+                  name="km_driven"
+                  placeholder="e.g. 50000"
+                  required
+                />
+                <i class="fas fa-road input-icon"></i>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="mileage" class="form-label"
+                ><i class="fas fa-user input-icon"></i> Mileage (KMPL)</label
+              >
+              <div class="input-wrapper">
+                <input
+                  type="number"
+                  class="form-control"
+                  id="mileage"
+                  name="mileage"
+                  placeholder="e.g. 15"
+                  min="0"
+                  required
+                />
+                <i class="fas fa-user input-icon"></i>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="engine" class="form-label"
+                ><i class="fas fa-cog input-icon"></i> Engine Capacity
+                (CC)</label
+              >
+              <div class="input-wrapper">
+                <input
+                  type="number"
+                  class="form-control"
+                  id="engine"
+                  name="engine"
+                  placeholder="e.g. 1500"
+                  required
+                />
+                <i class="fas fa-cog input-icon"></i>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="max_power" class="form-label"
+                ><i class="fas fa-tachometer-alt input-icon"></i> Max Power
+                (BHP)</label
+              >
+              <div class="input-wrapper">
+                <input
+                  type="number"
+                  class="form-control"
+                  id="max_power"
+                  name="max_power"
+                  placeholder="e.g. 120"
+                  required
+                />
+                <i class="fas fa-tachometer-alt input-icon"></i>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="brand" class="form-label"
+                ><i class="fas fa-car input-icon"></i> Brand</label
+              >
+              <div class="input-wrapper">
+                <select class="form-control" id="brand" name="brand" required>
+                  <option value="" disabled selected>Select Brand</option>
+                  <option value="Maruti">Maruti</option>
+                  <option value="Skoda">Skoda</option>
+                  <option value="Honda">Honda</option>
+                  <option value="Hyundai">Hyundai</option>
+                  <option value="Toyota">Toyota</option>
+                  <option value="Ford">Ford</option>
+                  <option value="Renault">Renault</option>
+                  <option value="Mahindra">Mahindra</option>
+                  <option value="Tata">Tata</option>
+                  <option value="Chevrolet">Chevrolet</option>
+                  <option value="Fiat">Fiat</option>
+                  <option value="Datsun">Datsun</option>
+                  <option value="Jeep">Jeep</option>
+                  <option value="Mercedes-Benz">Mercedes-Benz</option>
+                  <option value="Mitsubishi">Mitsubishi</option>
+                  <option value="Audi">Audi</option>
+                  <option value="Volkswagen">Volkswagen</option>
+                  <option value="BMW">BMW</option>
+                  <option value="Nissan">Nissan</option>
+                  <option value="Lexus">Lexus</option>
+                  <option value="Jaguar">Jaguar</option>
+                  <option value="Land">Land</option>
+                  <option value="MG">MG</option>
+                  <option value="Volvo">Volvo</option>
+                  <option value="Daewoo">Daewoo</option>
+                  <option value="Kia">Kia</option>
+                  <option value="Force">Force</option>
+                  <option value="Ambassador">Ambassador</option>
+                  <option value="Ashok">Ashok</option>
+                  <option value="Isuzu">Isuzu</option>
+                  <option value="Opel">Opel</option>
+                  <option value="Peugeot">Peugeot</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <button type="submit" class="predict-btn">
+            <i class="fas fa-magic"></i> Predict Price Now
+          </button>
+        </form>
+
+        <div id="result" class="result"></div>
+      </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script>
+      $("#carForm").on("submit", function (e) {
+        e.preventDefault();
+
+        const data = {
+          year: parseInt($("#year").val()),
+          km_driven: parseInt($("#km_driven").val()),
+          mileage: parseInt($("#mileage").val()),
+          engine: parseInt($("#engine").val()),
+          max_power: parseInt($("#max_power").val()),
+          brand: $("#brand").val().trim(),
+        };
+
+        const resultDiv = $("#result");
+        resultDiv
+          .removeClass("success error")
+          .addClass("loading show")
+          .html(
+            '<div class="loading-spinner"></div>Analyzing your car data...'
+          );
+
+        // Simulate API delay for better UX
+        setTimeout(() => {
+          $.ajax({
+            url: "/predict",
+            method: "POST",
+            contentType: "application/json",
+            data: JSON.stringify(data),
+            success: function (response) {
+              const price =
+                typeof response.price === "number"
+                  ? response.price.toLocaleString("en-US")
+                  : response.price;
+
+              resultDiv.removeClass("loading error").addClass("success").html(`
+                                    <i class="fas fa-check-circle"></i> Price Prediction Complete!
+                                    <div class="price-display">${price}</div>
+                                 `);
+            },
+            error: function (xhr) {
+              let errorMessage =
+                "Unable to predict price. Please check your inputs and try again.";
+
+              if (xhr.responseJSON && xhr.responseJSON.error) {
+                errorMessage = xhr.responseJSON.error;
+              }
+
+              resultDiv
+                .removeClass("loading success")
+                .addClass("error")
+                .html(
+                  `<i class="fas fa-exclamation-triangle"></i> ${errorMessage}`
+                );
+            },
+          });
+        }, 1500);
+      });
+
+      // Add input validation and formatting
+      $("#km_driven, #engine, #max_power").on("input", function () {
+        let value = $(this).val();
+        if (value < 0) $(this).val(0);
+      });
+
+      $("#year").on("blur", function () {
+        let year = parseInt($(this).val());
+        let currentYear = new Date().getFullYear();
+
+        if (!isNaN(year)) {
+          if (year > currentYear) $(this).val(currentYear);
+          if (year < 1900) $(this).val(1900);
+        }
+      });
+
+      $("#mileage").on("input", function () {
+        let mileage = parseInt($(this).val());
+        if (mileage < 0) $(this).val(0);
+        if (mileage > 100) $(this).val(100);
+      });
+
+      // Add smooth focus transitions
+      $(".form-control")
+        .on("focus", function () {
+          $(this).parent().addClass("focused");
+        })
+        .on("blur", function () {
+          $(this).parent().removeClass("focused");
+        });
+    </script>
+  </body>
+</html>
